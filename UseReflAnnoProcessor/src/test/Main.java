@@ -1,8 +1,9 @@
 package test;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import refl.ExpAlgGen;
+import refl.ReflExpAlg;
 import library.PPAlg;
 import library.ReflAlg;
 
@@ -14,7 +15,7 @@ public class Main {
     public static void main(String args[]) {
         PPAlg pp = new PPAlg();
         ReflExpAlg<String> ppExp = new ReflExpAlg<String>() {
-            ReflAlg<String> alg() {
+            public ReflAlg<String> alg() {
                 return pp;
             }
 
@@ -23,8 +24,8 @@ public class Main {
             }
         };
 
-        Exp fact = new Exp();
-        Exp.Type e = fact.Add(fact.Lit(3), fact.Lit(2));
+        ExpAlgGen fact = new ExpAlgGen();
+        ExpAlgGen.Type e = fact.Add(fact.Lit(3), fact.Lit(2));
         System.out.println(e.accept(ppExp));
 
 
@@ -35,7 +36,7 @@ public class Main {
                 return x;
             }
 
-            ReflAlg<Integer> alg() {
+            public ReflAlg<Integer> alg() {
                 return query;
             }
         };
@@ -114,60 +115,60 @@ final class QueryAlg<E> implements ReflAlg<E> {
     }
 }
 
-// try merge algebras??
+//// try merge algebras??
+//
+//abstract class ReflExpAlg<E> implements ExpAlg<E> {
+//    abstract ReflAlg<E> alg();
+//
+//    public E Lit(int x) {
+//        List<E> l = new ArrayList<E>();
+//        l.add(alg().KInt(x));
+//        return alg().Cons("Lit", l);
+//    }
+//
+//    public E Add(E e1, E e2) {
+//        List<E> l = new ArrayList<E>();
+//        l.add(e1);
+//        l.add(e2);
+//        return alg().Cons("Add",l);
+//    }
+//
+//    public E Var(String s) {
+//        List<E> l = new ArrayList<E>();
+//        l.add(alg().KString(s));
+//        return alg().Cons("Var", l);
+//    }
+//
+//}
 
-abstract class ReflExpAlg<E> implements ExpAlg<E> {
-    abstract ReflAlg<E> alg();
-
-    public E Lit(int x) {
-        List<E> l = new ArrayList<E>();
-        l.add(alg().KInt(x));
-        return alg().Cons("Lit", l);
-    }
-
-    public E Add(E e1, E e2) {
-        List<E> l = new ArrayList<E>();
-        l.add(e1);
-        l.add(e2);
-        return alg().Cons("Add",l);
-    }
-
-    public E Var(String s) {
-        List<E> l = new ArrayList<E>();
-        l.add(alg().KString(s));
-        return alg().Cons("Var", l);
-    }
-
-}
-
-// Free Object Algebra
-final class Exp implements ExpAlg<Exp.Type> {
-    interface Type {
-        <E> E accept(ExpAlg<E> alg);
-    }
-
-    public Type Lit(int x) {
-        return new Type() {
-            public <E> E accept(ExpAlg<E> alg) {
-                return alg.Lit(x);
-            }
-
-        };
-    }
-
-    public Type Add(Type e1, Type e2) {
-        return new Type() {
-            public <E> E accept(ExpAlg<E> alg) {
-                return alg.Add(e1.accept(alg), e2.accept(alg));
-            }
-        };
-    }
-
-    public Type Var(String s) {
-        return new Type() {
-            public <E> E accept(ExpAlg<E> alg) {
-                return alg.Var(s);
-            }
-        };
-    }
-}
+//// Free Object Algebra
+//final class ExpAlgGen implements ExpAlg<ExpAlgGen.Type> {
+//    interface Type {
+//        <E> E accept(ExpAlg<E> alg);
+//    }
+//
+//    public Type Lit(int x) {
+//        return new Type() {
+//            public <E> E accept(ExpAlg<E> alg) {
+//                return alg.Lit(x);
+//            }
+//
+//        };
+//    }
+//
+//    public Type Add(Type e1, Type e2) {
+//        return new Type() {
+//            public <E> E accept(ExpAlg<E> alg) {
+//                return alg.Add(e1.accept(alg), e2.accept(alg));
+//            }
+//        };
+//    }
+//
+//    public Type Var(String s) {
+//        return new Type() {
+//            public <E> E accept(ExpAlg<E> alg) {
+//                return alg.Var(s);
+//            }
+//        };
+//    }
+//}

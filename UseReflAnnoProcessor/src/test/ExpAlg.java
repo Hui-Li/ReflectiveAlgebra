@@ -1,9 +1,5 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import library.ReflAlg;
 import annotation.Refl;
 
 @Refl

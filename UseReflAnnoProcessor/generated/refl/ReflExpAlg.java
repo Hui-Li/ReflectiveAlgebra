@@ -7,7 +7,7 @@ import test.ExpAlg;
 
 public abstract class ReflExpAlg<E> implements ExpAlg<E> {
 
-	abstract ReflAlg<E> alg();
+	public abstract ReflAlg<E> alg();
 
 	public E Add(E p0, E p1) {
 		List<E> l = new ArrayList<E>();
